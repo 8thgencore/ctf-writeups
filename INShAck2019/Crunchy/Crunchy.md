@@ -1,5 +1,7 @@
 # Programming - Crunchy
 
+> Trade 500 billion years of CPU time and 50 exabytes of RAM for a shiny flag : [crunchy](https://github.com/axelmaker/ctf-writeups/blob/master/INShAck2019/Crunchy/crunchy.py)
+
 When we look at the function, we see that the value is returned to us  
 ```return 6 * crunchy(n - 1) + crunchy(n - 2)```  
 The first thought is Fibonacci. One of the coefficients is multiplied by 6.  
